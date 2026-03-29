@@ -1,6 +1,12 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const pool = require("./db");
+const {
+  passwordValidationError,
+  hashPassword,
+  verifyPassword,
+  publicUser
+} = require("./auth");
 
 const router = express.Router();
 
@@ -84,10 +90,17 @@ router.post("/register", async (req, res) => {
     return res.redirect("/register");
   }
 
+  const pwdErr = passwordValidationError(password);
+  if (pwdErr) {
+    req.session.flash = { message: pwdErr, type: "error" };
+    return res.redirect("/register");
+  }
+
   try {
+    const hashed = await hashPassword(password);
     await pool.query(
       "INSERT INTO users(username,password,role) VALUES($1,$2,'user')",
-      [username.trim(), password]
+      [username.trim(), hashed]
     );
     req.session.flash = { message: "Account created. Log in below.", type: "success" };
     res.redirect("/login");
@@ -106,8 +119,8 @@ router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   const result = await pool.query(
-    "SELECT * FROM users WHERE username=$1 AND password=$2",
-    [username, password]
+    "SELECT * FROM users WHERE username=$1",
+    [username]
   );
 
   if (result.rows.length === 0) {
@@ -115,7 +128,14 @@ router.post("/login", async (req, res) => {
     return res.redirect("/login");
   }
 
-  req.session.user = result.rows[0];
+  const row = result.rows[0];
+  const ok = await verifyPassword(password, row.password);
+  if (!ok) {
+    req.session.flash = { message: "Invalid username or password", type: "error" };
+    return res.redirect("/login");
+  }
+
+  req.session.user = publicUser(row);
   req.session.flash = { message: "Logged in", type: "success" };
   res.redirect("/board");
 });
@@ -278,10 +298,10 @@ router.post("/promote", async (req, res) => {
 
   if (req.session.user.id == id) {
     const result = await pool.query(
-      "SELECT * FROM users WHERE id=$1",
+      "SELECT id, username, role FROM users WHERE id=$1",
       [id]
     );
-    req.session.user = result.rows[0];
+    req.session.user = publicUser(result.rows[0]);
   }
 
   req.session.flash = {
@@ -304,12 +324,19 @@ router.post("/admin/users/create", async (req, res) => {
     return res.redirect("/admin/users");
   }
 
+  const pwdErr = passwordValidationError(password);
+  if (pwdErr) {
+    req.session.flash = { message: pwdErr, type: "error" };
+    return res.redirect("/admin/users");
+  }
+
   const userRole = role || "user";
 
   try {
+    const hashed = await hashPassword(password);
     await pool.query(
       "INSERT INTO users(username, password, role) VALUES($1, $2, $3)",
-      [username.trim(), password, userRole]
+      [username.trim(), hashed, userRole]
     );
     req.session.flash = { message: "User created successfully", type: "success" };
   } catch (err) {

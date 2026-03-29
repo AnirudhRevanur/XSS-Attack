@@ -2,12 +2,13 @@
   "name": "service",
   "version": "1.0.0",
   "dependencies": {
-    "express": "^4",
-    "pg": "^8",
-    "redis": "^4",
-    "express-session": "^1.17",
+    "bcryptjs": "^3.0.3",
     "connect-redis": "^7",
+    "ejs": "^3",
+    "express": "^4",
+    "express-session": "^1.17",
     "node-fetch": "^2",
-    "ejs": "^3"
+    "pg": "^8",
+    "redis": "^4"
   }
 }

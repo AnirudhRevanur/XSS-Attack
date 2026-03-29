@@ -13,5 +13,6 @@ CREATE TABLE users (
   role TEXT
 );
 
+-- Password for seed admin is 'adminpass' (bcrypt hash; matches services/web hashing)
 INSERT INTO users(username,password,role)
-VALUES ('admin','adminpass','admin');
+VALUES ('admin','$2b$10$V4vE6WBNowZKsd9/ufYNxeoeJEHl1aZQKqCwro4gnfeKXCSyBkke2','admin');
