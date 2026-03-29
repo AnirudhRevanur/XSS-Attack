@@ -1,0 +1,96 @@
+<div class="card">
+  <h2>Create New User</h2>
+  <form method="POST" action="/admin/users/create" style="margin-bottom: 1.5rem;">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" required>
+    
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+    
+    <label for="role">Role</label>
+    <select id="role" name="role" style="width: 100%; padding: 0.6rem 0.75rem; font-family: inherit; font-size: 0.95rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1rem;">
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
+    
+    <button type="submit" class="btn">Create User</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Users</h2>
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(function(u) { %>
+        <tr>
+          <td><%= u.id %></td>
+          <td><%= u.username %></td>
+          <td><%= u.role %></td>
+          <td>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <% if (u.role !== 'admin') { %>
+                <form method="POST" action="/promote" style="display: inline;" onsubmit="return confirm('Promote this user to admin?');">
+                  <input type="hidden" name="id" value="<%= u.id %>">
+                  <button type="submit" class="btn btn-sm btn-secondary">Promote</button>
+                </form>
+              <% } %>
+              <% if (u.id != user.id) { %>
+                <form method="POST" action="/admin/users/delete" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete user <%= u.username %>?');">
+                  <input type="hidden" name="id" value="<%= u.id %>">
+                  <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+              <% } else { %>
+                <span style="color: var(--muted); font-size: 0.85rem;">(You)</span>
+              <% } %>
+            </div>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Posts</h2>
+  <% if (posts && posts.length > 0) { %>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Author</th>
+          <th>Content</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% posts.forEach(function(post) { %>
+          <tr>
+            <td><%= post.id %></td>
+            <td><%= post.author %></td>
+            <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= post.content %></td>
+            <td>
+              <form method="POST" action="/admin/posts/delete" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete post #<%= post.id %>?');">
+                <input type="hidden" name="id" value="<%= post.id %>">
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p style="color: var(--muted);">No posts yet.</p>
+  <% } %>
+</div>
+
+<div style="margin-top: 1.5rem;">
+  <a href="/board" class="btn btn-secondary">Back to Board</a>
+</div>

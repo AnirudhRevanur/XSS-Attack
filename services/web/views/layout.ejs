@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title + ' — Lab' : 'Lab' %></title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1><a href="/" style="color: inherit; text-decoration: none;">Lab</a></h1>
+      <nav>
+        <a href="/board">Board</a>
+        <% if (user) { %>
+          <a href="/profile">Profile</a>
+          <% if (user.role === 'admin') { %>
+            <a href="/admin/users">Admin</a>
+          <% } %>
+          <a href="/logout">Logout</a>
+          <span class="muted" style="color: var(--muted); font-size: 0.9rem;"><%= user.username %></span>
+        <% } else { %>
+          <a href="/login">Login</a>
+          <a href="/register">Register</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <% if (flash && flash.message) { %>
+      <div class="alert alert-<%= flash.type || 'error' %>"><%= flash.message %></div>
+    <% } %>
+    <%- include(partial) %>
+  </main>
+</body>
+</html>

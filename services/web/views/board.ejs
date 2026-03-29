@@ -1,0 +1,26 @@
+<div class="card">
+  <h2>Message Board</h2>
+  <% if (user) { %>
+    <form method="POST" action="/post" style="margin-bottom: 1.5rem;">
+      <label for="content">New post</label>
+      <textarea id="content" name="content" placeholder="What's on your mind?" required></textarea>
+      <button type="submit" class="btn">Post</button>
+    </form>
+  <% } else { %>
+    <p style="color: var(--muted); margin-bottom: 1rem;"><a href="/login">Log in</a> to post.</p>
+  <% } %>
+</div>
+
+<ul class="post-list card" style="list-style: none; padding: 0; margin: 0;">
+  <% if (posts.length === 0) { %>
+    <li class="post-item" style="color: var(--muted);">No posts yet.</li>
+  <% } else { %>
+    <% posts.forEach(function(post) { %>
+      <li class="post-item">
+        <span class="post-author"><%- post.author %></span>
+        <div class="post-content"><%- post.content %></div>
+        <div class="post-meta">#<%= post.id %></div>
+      </li>
+    <% }); %>
+  <% } %>
+</ul>

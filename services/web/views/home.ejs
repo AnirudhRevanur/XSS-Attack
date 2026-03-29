@@ -1,0 +1,9 @@
+<div class="hero">
+  <h2>Message Board</h2>
+  <p>Share and read posts. Log in to post; anyone can browse.</p>
+  <a href="/board" class="btn">View Board</a>
+  <% if (!user) { %>
+    <a href="/login" class="btn btn-secondary">Login</a>
+    <a href="/register" class="btn btn-secondary">Register</a>
+  <% } %>
+</div>

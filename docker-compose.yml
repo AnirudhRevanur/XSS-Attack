@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - web
+
+  web:
+    build: ./services/web
+    image: anirudhrevanur/company-broadcast:web
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+      ADMIN_HOST: admin
+      API_HOST: api
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+
+  api:
+    build: ./services/api
+    image: anirudhrevanur/company-broadcast:api
+    environment:
+      DB_HOST: db
+
+  admin:
+    build: ./services/admin
+    image: anirudhrevanur/company-broadcast:admin
+    environment:
+      DB_HOST: db
+
+  bot:
+    build: ./services/bot
+    image: anirudhrevanur/company-broadcast:bot
+    environment:
+      WEB_URL: http://web:3000
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: adminpass
+      RELOAD_INTERVAL: 5000
+    depends_on:
+      - web
+    restart: unless-stopped
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: labpass
+      POSTGRES_DB: labdb
+    volumes:
+      - ./db-init:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:latest

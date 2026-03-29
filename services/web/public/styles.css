@@ -1,0 +1,275 @@
+/* Lab message board – clean, readable UI */
+:root {
+  --bg: #0f1419;
+  --surface: #1a2332;
+  --border: #2d3a4d;
+  --text: #e6edf3;
+  --muted: #8b9eb0;
+  --accent: #58a6ff;
+  --accent-hover: #79b8ff;
+  --success: #3fb950;
+  --danger: #f85149;
+  --radius: 8px;
+  --font: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* Header */
+.site-header {
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+}
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.site-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.site-header nav {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+.site-header nav a {
+  color: var(--muted);
+}
+.site-header nav a:hover {
+  color: var(--text);
+}
+
+/* Cards and surfaces */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.card h2 {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Forms */
+label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+input[type="text"],
+input[type="password"],
+textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn:hover {
+  background: var(--accent-hover);
+}
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover {
+  background: var(--border);
+  color: var(--text);
+}
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+.btn-danger:hover {
+  filter: brightness(1.1);
+}
+.btn-sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+/* Board / posts */
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.post-item {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.post-item:last-child {
+  border-bottom: none;
+}
+.post-author {
+  font-weight: 600;
+  color: var(--accent);
+  margin-right: 0.5rem;
+}
+.post-content {
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.post-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.35rem;
+}
+
+/* Alerts */
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+.alert-error {
+  background: rgba(248, 81, 73, 0.15);
+  border: 1px solid var(--danger);
+  color: #f0a0a0;
+}
+.alert-success {
+  background: rgba(63, 185, 80, 0.15);
+  border: 1px solid var(--success);
+  color: #8fdc9a;
+}
+
+/* Auth pages */
+.auth-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+.auth-layout .card {
+  width: 100%;
+  max-width: 360px;
+}
+.auth-layout .form-actions {
+  flex-direction: column;
+  align-items: stretch;
+}
+.auth-layout .btn {
+  width: 100%;
+}
+
+/* Profile */
+.profile-dl {
+  margin: 0;
+}
+.profile-dl dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+.profile-dl dt:first-child { margin-top: 0; }
+.profile-dl dd {
+  margin: 0.25rem 0 0;
+}
+
+/* Admin */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.admin-table th {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Home / landing */
+.hero {
+  text-align: center;
+  padding: 2rem 0;
+}
+.hero p {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+.hero .btn {
+  margin: 0 0.35rem;
+}
